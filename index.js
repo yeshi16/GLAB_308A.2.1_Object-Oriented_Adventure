@@ -27,6 +27,8 @@ const adventurer = {
 // Part 2: Class Fantasy
 
 class Character {
+    static MAX_HEALTH = 100;
+
     constructor(name){
         this.name = name;
         this.health = 100;
@@ -53,8 +55,12 @@ robin.companion.companion.inventory = ["small hat", "sunglasses"];
 // Part 3: Class Features
 
 class Adventurer extends Character {
+    static ROLES = ["Fighter", "Healer", "Wizard"]
     constructor(name, role){
         super(name);
+        if (!Adventurer.ROLES.includes(role)) {
+            throw new Error(`Invalid role: ${role}. Must be one of: ${Adventurer.ROLES.join(", ")}`);
+        }
         this.role = role;
         this.inventory.push("bedroll", "50 gold conins");
     }
@@ -83,4 +89,6 @@ leo.companion.inventory = ["small hat", "sunglasses"];
 
 robin1.roll();
 leo.roll();
-robin1.scout()
+robin1.scout();
+
+// Part 4: Class Uniforms
