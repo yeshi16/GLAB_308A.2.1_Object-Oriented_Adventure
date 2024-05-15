@@ -79,8 +79,8 @@ class Adventurer extends Character {
     }
 }
 
-const duelAdventurer = new Adventurer("jane", "Fighter");
-const opposingAdventurer = new Adventurer("john", "Healer");
+// const duelAdventurer = new Adventurer("jane", "Fighter");
+// const opposingAdventurer = new Adventurer("john", "Healer");
 
 // duelAdventurer.duel(opposingAdventurer);
 
@@ -107,7 +107,7 @@ healersFactory.generate("Alice");
 
 // Part 6: Developing Skills
 const invalidRole = new Adventurer("jane", "warrior")
-const duelAdventurer1 = new Adventurer("jane", "Fighter");
-const opposingAdventurer1 = new Adventurer("john", "Healer");
+const duelAdventurer = new Adventurer("jane", "Fighter");
+const opposingAdventurer = new Adventurer("john", "Healer");
 
-duelAdventurer1.duel(opposingAdventurer1)
+duelAdventurer.duel(opposingAdventurer)
