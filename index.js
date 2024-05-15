@@ -4,91 +4,110 @@ const adventurer = {
     name: "Robin",
     health: 10,
     inventory: ["sword", "potion", "artifact"],
-    companion:{
+    companion: {
         name: "Leo",
         type: "Cat",
         companion: {
             name: "Frank",
             type: "Flea",
-            belongings: ["hat", "sunglasses"] 
+            belongings: ["hat", "sunglasses"]
         }
     },
 
-    roll(mod = 0){
+    roll(mod = 0) {
         const result = Math.floor(Math.random() * 20) + 1 + mod;
         console.log(`${this.name} rolled a ${result}.`)
     }
 }
 
 // adventurer.inventory.forEach(item => {console.log(item)})
-
 // adventurer.roll();
 
 // Part 2: Class Fantasy
-
 class Character {
     static MAX_HEALTH = 100;
 
-    constructor(name){
+    constructor(name) {
         this.name = name;
-        this.health = 100;
+        this.health = Character.MAX_HEALTH; // Set health to the maximum health
         this.inventory = [];
     }
-    roll(mod = 0){
+
+    roll(mod = 0) {
         const result = Math.floor(Math.random() * 20) + 1 + mod;
-        console.log(`${this.name} rolled a ${result}.`)
+        console.log(`${this.name} rolled a ${result}.`);
+        return result;
     }
 }
-
-const robin = new Character("Robin");
-robin.inventory = ["sword", "potion", "artifact"];
-robin.companion = new Character("Leo")
-robin.companion.type = "Cat"
-robin.companion.companion = new Character("Frank")
-robin.companion.companion.type = "Flea"
-robin.companion.companion.inventory = ["small hat", "sunglasses"];
-
-// robin.roll()
-// robin.companion.roll()
-// robin.companion.companion.roll()
-
-// Part 3: Class Features
 
 class Adventurer extends Character {
-    static ROLES = ["Fighter", "Healer", "Wizard"]
-    constructor(name, role){
+    static ROLES = ["Fighter", "Healer", "Wizard"];
+
+    constructor(name, role) {
         super(name);
         if (!Adventurer.ROLES.includes(role)) {
-            throw new Error(`Invalid role: ${role}. Must be one of: ${Adventurer.ROLES.join(", ")}`);
+            console.log(`${this.name} has entered an invalid role: ${role}`);
         }
         this.role = role;
-        this.inventory.push("bedroll", "50 gold conins");
+        this.inventory.push("bedroll", "50 gold coins");
     }
 
-    scout(){
+    scout() {
         console.log(`${this.name} is scouting ahead...`);
-        super.roll()
+        super.roll();
+    }
+
+    duel(advent) {
+        let currentHealth = this.health;
+        let adventHealth = advent.health;
+        while (currentHealth > 50 && adventHealth > 50) {
+            const thisRoll = this.roll();
+            const adventRoll = advent.roll();
+            
+            if (thisRoll > adventRoll) {
+                adventHealth--;
+            } else {
+                currentHealth--;
+            }
+            console.log(`For this round ${this.name} has ${currentHealth} health. ${advent.name} has ${adventHealth} health`);
+        }
+        if (currentHealth > adventHealth) {
+            console.log(`The winner of this duel is ${this.name}, the adventurer still above 50 health.`);
+        } else {
+            console.log(`The winner of this duel is ${advent.name}, the adventurer still above 50 health.`);
+        }
     }
 }
 
-class Companion extends Character {
-    constructor (name, type){
-        super(name)
-        this.type = type;
+const duelAdventurer = new Adventurer("jane", "Fighter");
+const opposingAdventurer = new Adventurer("john", "Healer");
+
+// duelAdventurer.duel(opposingAdventurer);
+
+// Part 5: Gather your Party
+// Define the AdventurerFactory class
+class AdventurerFactory {
+    constructor(role) {
+        this.role = role;
+        this.adventurers = [];
     }
-
+    generate(name) {
+        const newAdventurer = new Adventurer(name, this.role);
+        this.adventurers.push(newAdventurer);
+    }
+    findByIndex(index) {
+        return this.adventurers[index];
+    }
+    findByName(name) {
+        return this.adventurers.find((a) => a.name === name);
+    }
 }
+const healersFactory = new AdventurerFactory("Healer");
+healersFactory.generate("Alice");
 
-const robin1 = new Adventurer("robin", "warrior");
-const leo = new Companion("Leo", "cat");
+// Part 6: Developing Skills
+const invalidRole = new Adventurer("jane", "warrior")
+const duelAdventurer1 = new Adventurer("jane", "Fighter");
+const opposingAdventurer1 = new Adventurer("john", "Healer");
 
-robin1.inventory = ["sword", "potion", "artifact"];
-robin1.companion = leo;
-leo.companion = new Companion("frank", "flea")
-leo.companion.inventory = ["small hat", "sunglasses"];
-
-robin1.roll();
-leo.roll();
-robin1.scout();
-
-// Part 4: Class Uniforms
+duelAdventurer1.duel(opposingAdventurer1)
